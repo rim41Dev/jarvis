@@ -121,7 +121,6 @@ def get_api_key() -> str:
     return key
 
 
-# api_key = "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"
 api_key = get_api_key()
 openai.api_key = api_key
 
