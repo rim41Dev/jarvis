@@ -1,0 +1,5 @@
+Now I will tell you about some paths to programs i am currently using, it can be helpful for starting these programms. The text format will be like `{variants of program names: path; ...}`. Don't forget about the quotation marks around paths containing spaces
+{
+    vpn, псифон, псифон 3, VPN : D:\programms\psiphon3.exe;
+    opera, опера, браузер по умолчанию, браузер: C:\Users\rim41\AppData\Local\Programs\Opera GX\launcher.exe;
+}
