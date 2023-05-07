@@ -15,6 +15,7 @@ tts = pyttsx3.init()
 with open("prompts/actor.txt", 'r') as actor,\
      open("prompts/paths.txt", 'r') as paths:
     actor = actor.read()
+    # You need to write paths.txt yourself
     paths = paths.read()
 
 
