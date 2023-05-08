@@ -14,5 +14,5 @@ You need to install all libraries on your pc
   
  
   
-  # What can it do now
-  Now JARVIS can change and creat pictures, videos, music and Microsoft Word documents. It can change pdf documents, too, but it cant create pdf files yet.
+# What can it do now
+Now JARVIS can change and creat pictures, videos, music and Microsoft Word documents. It can change pdf documents, too, but it cant create pdf files yet.

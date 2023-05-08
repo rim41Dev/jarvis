@@ -7,6 +7,7 @@ import commands
 from threading import Thread, Timer
 from datetime import datetime
 import keyring
+import random
 
 
 tts = pyttsx3.init()
@@ -167,8 +168,8 @@ def ask(text: str) -> GPTAnswer:
     global msgs
 
     for cmd in commands.cmds.keys():
-        if text.lower() in commands.cmds[cmd]:
-            return GPTAnswer(f"#CODE{cmd}")
+        if text.lower() in commands.cmds[cmd][0]:
+            return GPTAnswer(f"#CODE{cmd}#SOUND{random.choice(commands.cmds[cmd][1])}")
     
     msgs.append({"role": "user", "content": text})
 
@@ -215,7 +216,11 @@ def main():
         except sr.RequestError as e:
             print(f"Ошибка в работе сервиса распознавания речи: {e}")
 
-        except:
+        except Exception as e:
+            with open("logs/errors.txt", 'r+', encoding='utf-8') as errs:
+                current = errs.read()
+                new_error = {datetime.now(): e}
+                errs.write(current + '\n' + str(new_error))
             print("Неожиданная ошибка. Возможно, вы превысили лимит Запросов (6 запросов в минуту)")
 
 
