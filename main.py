@@ -67,6 +67,7 @@ class GPTAnswer:
         if self.text.startswith("#PYTHON"):
             text = self.text.split("#SOUND")
             self.python_code = text[0].replace("#PYTHON", "")
+            self.python_code = "import os\n" + self.python_code  # I dont know why but gpt often forgets about os module. i have no another idea how to fix that...
             self.answer = text[1]
             return 3
         
