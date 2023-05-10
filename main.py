@@ -22,9 +22,10 @@ with open("prompts/actor.txt", 'r') as actor,\
 
 class GPTAnswer:
     """
-    Класс, принимающий при инициализации аргументом строку - ответ от ChatGPT.
-    При инициализации автоматически распознается тип ответа (см. метод recognize_type), ответ парсится и запускается и/или озвучивается
-    Для запуска кода и произведения речи используется многопоточность.
+    Init arg: a string, response from ChatGPT.
+    During initialization, the response type is automatically recognized (see the recognize_type method).
+    Than the object is parsing and launching and/or voicing
+    Multithreading is used to run code and produce speech.
     """
     def __init__(self, text: str):
         self.text = text
@@ -47,15 +48,15 @@ class GPTAnswer:
     
     def recognize_type(self) -> int:
         """
-        Распознает тип ответа от ChatGPT:
+        Recognizes the type of answer:
 
-        1 - Ответ
+        1 - Just an answer
 
-        2 - Код для выполнения bat
+        2 - Bat code
 
-        3 - код python 3.x
+        3 - Python 3.x code (currently 3.10 but I don't know if it affects smth
 
-        На основании полученного типа будет по разному выполнятся логика воспроизведения ответа.
+        Based on the received type, the logic of doing the response will be executed differently.
         """
 
         if self.text.startswith("#CODE"):
@@ -75,13 +76,13 @@ class GPTAnswer:
         return 1
     
     def do_code(self):
-        """Создаёт поток bat кода"""
+        """Creates bat code thread"""
         self.write_bat_code_in_file()
         self.code_thread = Timer(1, os.startfile, args=("temp.bat",))
         # print("Создан поток кода...")
 
     def do_python_code(self):
-        """Создает поток python кода"""
+        """Creates python code thread"""
         self.code_thread = Timer(1, exec, args=(self.python_code,))
         print("Создан поток python кода...")
 
@@ -90,14 +91,14 @@ class GPTAnswer:
             file.write(self.code)
 
     def say(self):
-        """Синтезирует речь и создаёт поток речи"""
+        """Synthesizes speech and creates a speech thread"""
         tts.say(self.answer)
         self.speech_thread = Thread(target=tts.runAndWait)
         print("Создан поток речи...")
 
     def start(self):
         """
-        Запускает поток речи и при необходимости поток кода.
+        Starts the speech thread and, if necessary, the code thread.
         """
         self.speech_thread.start()
         print("Запущен поток речи")
@@ -110,9 +111,9 @@ class GPTAnswer:
 
 def get_api_key() -> str:
     """
-    При помощи keyring извлекается API-ключ OpenAI.
-    Если ключ не был введен - предлагается ввести его.
-    В таком случае ключ добавляется в память ПК через keyring.
+    Gets OpenAI API-key using keyring
+    If key wasnt received from the user - Offers to enter it.
+    In this case, the key is adding to the PC memory via keyring.
     """
     key = keyring.get_password("openai", os.getlogin())
     if key is None:
@@ -144,7 +145,7 @@ completion = openai.ChatCompletion.create(
 
 def end():
     """
-    Рассчитывается добавить сюда чистку всех временных файлов, созданных в процессе работы.
+    I am going to add here the cleaning of every temp-files
     """
     pass
 
@@ -154,17 +155,17 @@ atexit.register(end)
 
 def ask(text: str) -> GPTAnswer:
     """
-    Получает запрос от пользователя, отправляет в ChatGPT и возвращает объект класса GPTAnswer (см. class GPTAnswer)
-    Класс сразу инициализируется, поэтому для воспроизведения ответа достаточно вызвать эту функцию.
-    Также ведется запись логов в файл по пути logs/info.txt в формате
+    Receives a request from the user, sends it to ChatGPT and returns a GPTAnswer objec (see class GPTAnswer)
+    The class is initialized immediately, so it is enough to call this function to reproduce the response.
+    Also, logs are writing to `logs/info.txt` in the following format:
     
     {
-        время: {
-            Текст запроса: Ответ от ChatGPT
+        time: {
+            User's text: ChatGPT's answer
         }
     }
 
-    В будущем система логов будет существенно доработана с использованием json и logging.
+    In the future, the logging system will be significantly improved using json and logging.
     """
     global msgs
 
@@ -196,7 +197,7 @@ r = sr.Recognizer()
 
 def main():
     """
-    Бесконечный цикл, запрашивающий аудио ввод через микрофон и отправляющий его в ChatGPT, затем автоматически выполняется код результата и/или озвучивается текст результата. Подробнее см. функцию ask.
+    An infinity loop, requsting audio input using mic and sending it to ChatGPT, then the result code is automatically executed and/or the result text is voiced. (See the function `ask`)
     """
     while True:
         # используем PyAudio для получения аудио с микрофона
