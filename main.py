@@ -68,13 +68,13 @@ class GPTAnswer:
         if self.text.startswith("#PYTHON"):
             text = self.text.split("#SOUND")
             self.python_code = text[0].replace("#PYTHON", "")
-            self.python_code = "import os\n" + self.python_code  # I dont know why but gpt often forgets about os module. i have no another idea how to fix that...
+            self.python_code = "import os\nfrom utils import *\n" + self.python_code  # I dont know why but gpt often forgets about os module. i have no another idea how to fix that...
             self.answer = text[1]
             return 3
         
         self.answer = self.text
         return 1
-    
+
     def do_code(self):
         """Creates bat code thread"""
         self.write_bat_code_in_file()
@@ -224,6 +224,5 @@ def main():
                 new_error = {datetime.now(): e}
                 errs.write(current + '\n' + str(new_error))
             print("Неожиданная ошибка. Возможно, вы превысили лимит Запросов (6 запросов в минуту)")
-
 
 main()
